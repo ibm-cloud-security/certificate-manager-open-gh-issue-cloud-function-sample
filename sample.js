@@ -19,7 +19,8 @@ function getDate(timestamp) {
 }
 
 function createIssueBody(notificationData) {
-    if (notificationData.event_type === "cert_about_to_expire_reimport_required")
+    if (notificationData.event_type === "cert_about_to_expire_reimport_required" ||
+        notificationData.event_type === "cert_about_to_expire_renew_required")
         return `The following ${notificationData.certificates.length} certificate/s will expire on ${getDate(notificationData.expiry_date)}:
 ${notificationData.certificates.reduce((accumulator, currentValue) => {
             return accumulator + `
@@ -27,7 +28,8 @@ ${notificationData.certificates.reduce((accumulator, currentValue) => {
 CRN: ${currentValue.cert_crn}
 `;
         }, "")}`;
-    if (notificationData.event_type === "cert_expired_reimport_required")
+    if (notificationData.event_type === "cert_expired_reimport_required" ||
+        notificationData.event_type === "cert_expired_renew_required")
         return `The following ${notificationData.certificates.length} certificate/s have already expired:
 ${notificationData.certificates.reduce((accumulator, currentValue) => {
             return accumulator + `
